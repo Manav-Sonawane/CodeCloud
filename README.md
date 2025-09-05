@@ -1,6 +1,3 @@
-Here’s the **copyable `README.md`** for your project:
-
-````markdown
 # 🖥️ Online Compiler
 
 An online code compiler inspired by **OnlineGDB / Programiz**, built as a full-stack mini-project.  
