@@ -48,7 +48,6 @@ It supports **multiple programming languages**, user authentication, and code st
 git clone https://github.com/<your-username>/online-compiler.git
 cd online-compiler
 ```
-````
 
 ### 2. Install dependencies
 
