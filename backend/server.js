@@ -5,6 +5,7 @@ import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/auth.js";
 import pool from "./db.js";
+import compilerRoutes from "./routes/compiler.js";
 
 dotenv.config();
 
@@ -18,6 +19,8 @@ app.use("/api/auth", authRoutes);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "../frontend")));
+
+app.use("/api/compiler", compilerRoutes);
 
 app.get("/ping", async (req, res) => {
   try {
