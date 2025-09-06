@@ -1,0 +1,19 @@
+/* make CodeMirror fill the card body */
+.CodeMirror {
+  height: 60vh;
+}
+#output {
+  min-height: 60vh;
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono",
+    monospace;
+  font-size: 13px;
+}
+
+/* optional fine-tuning */
+body {
+  background: #f8f9fa;
+}
+.card {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
