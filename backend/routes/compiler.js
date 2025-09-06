@@ -11,7 +11,7 @@ router.post("/run", async (req, res) => {
   }
 
   try {
-    const result = await runCode(language, versionIndex, code);
+    const result = await runCode(language, versionIndex, code, stdin);
     res.json(result);
   } catch (error) {
     console.error("JDoodle Error:", error);
