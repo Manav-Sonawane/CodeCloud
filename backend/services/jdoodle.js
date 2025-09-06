@@ -20,5 +20,7 @@ export async function runCode(language, versionIndex, code, stdin = "") {
     body: JSON.stringify(body),
   });
 
-  return response.json();
+  const result = await response.json();
+
+  return result;
 }

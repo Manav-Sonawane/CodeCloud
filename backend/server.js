@@ -7,7 +7,11 @@ import authRoutes from "./routes/auth.js";
 import pool from "./db.js";
 import compilerRoutes from "./routes/compiler.js";
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load .env from parent directory (root of project)
+dotenv.config({ path: path.join(__dirname, "../.env") });
 
 const app = express();
 
@@ -16,8 +20,6 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 app.use("/api/compiler", compilerRoutes);
