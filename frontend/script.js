@@ -300,6 +300,7 @@ async function handleSignIn(event) {
       isSignedIn = true;
       updateAuthUI();
       hideSignInModal();
+      setUIEnabled(true); // <-- Enable UI after login
     } else {
       status.textContent = data.error || "Login failed";
     }
@@ -370,11 +371,42 @@ function handleLogout() {
   updateAuthUI();
 }
 
-// On page load, check for token
+// Utility to enable/disable main UI
+function setUIEnabled(enabled) {
+  // Disable/enable editor
+  if (codeMirrorEditor) {
+    codeMirrorEditor.setOption("readOnly", !enabled);
+  }
+  // Disable/enable run button
+  const runBtn = document.getElementById("run-btn");
+  if (runBtn) runBtn.disabled = !enabled;
+  // Optionally disable other controls (save, download, add file, etc.)
+  const controls = document.querySelectorAll(
+    "#save-btn, #download-btn, #add-file-btn, #language-selector"
+  );
+  controls.forEach((el) => {
+    if (el) el.classList.toggle("disabled", !enabled);
+    if (el) el.disabled = !enabled;
+  });
+  // Optionally, add a blur or overlay to the main container
+  const mainContainer = document.querySelector(".main-container");
+  if (mainContainer) {
+    mainContainer.style.filter = enabled ? "" : "blur(2px)";
+    mainContainer.style.pointerEvents = enabled ? "" : "none";
+  }
+}
+
+// On page load, check for token and show sign-in if not signed in
 document.addEventListener("DOMContentLoaded", () => {
   if (localStorage.getItem("token")) {
     isSignedIn = true;
     updateAuthUI();
+    setUIEnabled(true);
+  } else {
+    isSignedIn = false;
+    updateAuthUI();
+    setUIEnabled(false);
+    showSignInModal();
   }
 });
 
