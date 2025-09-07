@@ -275,11 +275,108 @@ function hideSignInModal() {
   document.getElementById("signin-modal").classList.remove("show");
 }
 
-function handleSignIn(event) {
+// --- AUTH INTEGRATION ---
+async function handleSignIn(event) {
   event.preventDefault();
-  // Add sign-in logic here
-  hideSignInModal();
+  const form = event.target;
+  const email = form.querySelector('input[type="email"]').value.trim();
+  const password = form.querySelector('input[type="password"]').value;
+  const status =
+    form.querySelector(".auth-status") || document.createElement("div");
+  status.className = "auth-status";
+  status.style.color = "red";
+  status.style.marginTop = "0.5rem";
+  form.appendChild(status);
+
+  try {
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+    if (res.ok && data.token) {
+      localStorage.setItem("token", data.token);
+      isSignedIn = true;
+      updateAuthUI();
+      hideSignInModal();
+    } else {
+      status.textContent = data.error || "Login failed";
+    }
+  } catch (err) {
+    status.textContent = "Network error";
+  }
 }
+
+async function handleSignUp(event) {
+  event.preventDefault();
+  const form = event.target;
+  const username = form.querySelector('input[type="text"]').value.trim();
+  const email = form.querySelector('input[type="email"]').value.trim();
+  const password = form.querySelector('input[type="password"]').value;
+  const status =
+    form.querySelector(".auth-status") || document.createElement("div");
+  status.className = "auth-status";
+  status.style.color = "red";
+  status.style.marginTop = "0.5rem";
+  form.appendChild(status);
+
+  try {
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, email, password }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      status.style.color = "green";
+      status.textContent = "Registration successful! Please sign in.";
+      setTimeout(() => {
+        switchToSignIn();
+        status.textContent = "";
+      }, 1200);
+    } else {
+      status.textContent = data.error || "Registration failed";
+    }
+  } catch (err) {
+    status.textContent = "Network error";
+  }
+}
+
+function updateAuthUI() {
+  const signinBtn = document.getElementById("signin-btn");
+  const userMenu = document.getElementById("user-menu");
+  if (isSignedIn) {
+    if (signinBtn) signinBtn.style.display = "none";
+    // Optionally show user info or a logout button
+    if (userMenu && !document.getElementById("logout-btn")) {
+      const logoutBtn = document.createElement("button");
+      logoutBtn.className = "btn";
+      logoutBtn.id = "logout-btn";
+      logoutBtn.textContent = "Log Out";
+      logoutBtn.onclick = handleLogout;
+      userMenu.appendChild(logoutBtn);
+    }
+  } else {
+    if (signinBtn) signinBtn.style.display = "";
+    const logoutBtn = document.getElementById("logout-btn");
+    if (logoutBtn) logoutBtn.remove();
+  }
+}
+
+function handleLogout() {
+  localStorage.removeItem("token");
+  isSignedIn = false;
+  updateAuthUI();
+}
+
+// On page load, check for token
+document.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("token")) {
+    isSignedIn = true;
+    updateAuthUI();
+  }
+});
 
 async function runCode() {
   const runBtn = document.getElementById("run-btn");
@@ -430,4 +527,27 @@ function formatCode(code, language) {
   }
 
   return formattedLines.join("\n");
+}
+
+function switchToSignUp() {
+  hideSignInModal();
+  showSignUpModal();
+}
+
+function switchToSignIn() {
+  hideSignUpModal();
+  showSignInModal();
+}
+
+function showSignUpModal() {
+  document.getElementById("signup-modal").classList.add("show");
+}
+function hideSignUpModal() {
+  document.getElementById("signup-modal").classList.remove("show");
+}
+function showSignInModal() {
+  document.getElementById("signin-modal").classList.add("show");
+}
+function hideSignInModal() {
+  document.getElementById("signin-modal").classList.remove("show");
 }

@@ -233,7 +233,7 @@
     </div>
 
     <!-- Sign In Modal -->
-    <div class="signin-modal" id="signin-modal">
+    <div class="auth-modal signin-modal" id="signin-modal">
       <div class="signin-content">
         <button class="close-modal" onclick="hideSignInModal()">
           <svg
@@ -274,12 +274,78 @@
             <button
               type="button"
               class="btn btn-full"
-              onclick="hideSignInModal()"
+              onclick="switchToSignUp()"
             >
-              Cancel
+              Sign Up
             </button>
             <button type="submit" class="btn primary btn-full">Sign In</button>
           </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div class="signup-modal" id="signup-modal">
+      <div class="signin-content">
+        <!-- Reusing same wrapper styles -->
+        <button class="close-modal" onclick="hideSignUpModal()">
+          <svg
+            class="icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+        <h2 class="signin-title">Create Your CloudCode Account</h2>
+        <form onsubmit="handleSignUp(event)">
+          <div class="input-group">
+            <label class="input-label">Username</label>
+            <input
+              type="text"
+              class="input-field"
+              placeholder="Enter a username"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Email</label>
+            <input
+              type="email"
+              class="input-field"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Password</label>
+            <input
+              type="password"
+              class="input-field"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          <div class="signin-actions">
+            <button
+              type="button"
+              class="btn btn-full"
+              onclick="switchToSignIn()"
+            >
+              Cancel
+            </button>
+            <button type="submit" class="btn primary btn-full">Sign Up</button>
+          </div>
+          <p class="switch-auth">
+            Already have an account?
+            <a href="#" onclick="switchToSignIn()">Sign In</a>
+          </p>
         </form>
       </div>
     </div>
