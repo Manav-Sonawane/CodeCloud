@@ -49,7 +49,19 @@ let files = [
 let codeMirrorEditor = null;
 
 // Initialize the application
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("token")) {
+    isSignedIn = true;
+    updateAuthUI();
+    setUIEnabled(true);
+    loadUserCodes();
+  } else {
+    isSignedIn = false;
+    updateAuthUI();
+    setUIEnabled(false);
+    showSignInModal();
+  }
+
   renderFiles();
   renderTabs();
   setupCodeEditor();
@@ -382,7 +394,7 @@ function setUIEnabled(enabled) {
   if (runBtn) runBtn.disabled = !enabled;
   // Optionally disable other controls (save, download, add file, etc.)
   const controls = document.querySelectorAll(
-    "#save-btn, #download-btn, #add-file-btn, #language-selector"
+    "#save-btn, #download-btn, .add-file-btn, #language-selector"
   );
   controls.forEach((el) => {
     if (el) el.classList.toggle("disabled", !enabled);
@@ -582,4 +594,99 @@ function showSignInModal() {
 }
 function hideSignInModal() {
   document.getElementById("signin-modal").classList.remove("show");
+}
+
+async function loadUserCodes() {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.warn("User not logged in, skipping file load.");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/code", {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch user codes");
+    }
+
+    const files = await res.json();
+    const filesList = document.getElementById("files-list");
+    filesList.innerHTML = "";
+
+    files.forEach((file) => {
+      const div = document.createElement("div");
+      div.classList.add("file-item");
+      div.textContent = file.filename;
+
+      div.onclick = () => loadFileIntoEditor(file.id);
+
+      filesList.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Error loading user codes:", err);
+  }
+}
+
+async function loadFileIntoEditor(fileId) {
+  const token = localStorage.getItem("token");
+
+  try {
+    const res = await fetch(`/api/code/${fileId}`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!res.ok) throw new Error("Failed to load file");
+
+    const file = await res.json();
+
+    codeMirrorEditor.setValue(file.code); // CodeMirror editor
+    document.getElementById("editor-title").textContent = file.filename;
+  } catch (err) {
+    console.error("Error loading file:", err);
+  }
+}
+
+async function saveCurrentFile() {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("You must sign in first!");
+    return;
+  }
+
+  const currentFile = files.find((file) => file.name === activeTab);
+  if (!currentFile) {
+    alert("No active file to save!");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/code/save", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        filename: currentFile.name,
+        language: currentFile.language,
+        code: codeMirrorEditor.getValue(),
+      }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      alert("File saved!");
+      loadUserCodes(); // refresh sidebar
+    } else {
+      alert("Save failed: " + data.error);
+    }
+  } catch (err) {
+    console.error("Error saving file:", err);
+    alert("Save failed (network error)");
+  }
 }

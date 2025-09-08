@@ -726,3 +726,13 @@ body {
 .signup-modal.show {
   display: flex;
 }
+
+.file-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #333;
+}
+.file-item:hover {
+  background: #222;
+  color: #00d8ff;
+}

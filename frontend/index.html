@@ -136,7 +136,11 @@
         <div class="editor-header">
           <span class="editor-title" id="editor-title">main.py</span>
           <div class="editor-actions">
-            <button class="btn tooltip" data-tooltip="Save file">
+            <button
+              class="btn tooltip"
+              data-tooltip="Save file"
+              onclick="saveCurrentFile()"
+            >
               <svg
                 class="icon"
                 fill="none"
@@ -152,6 +156,7 @@
               </svg>
               Save
             </button>
+
             <a
               href="#"
               onclick="downloadCurrentFile()"

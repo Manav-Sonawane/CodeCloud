@@ -6,6 +6,7 @@ import cors from "cors";
 import authRoutes from "./routes/auth.js";
 import pool from "./db.js";
 import compilerRoutes from "./routes/compiler.js";
+import codeRoutes from "./routes/codeRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,6 +24,7 @@ app.use("/api/auth", authRoutes);
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 app.use("/api/compiler", compilerRoutes);
+app.use("/api/code", codeRoutes);
 
 app.get("/ping", async (req, res) => {
   try {
