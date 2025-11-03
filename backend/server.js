@@ -11,6 +11,9 @@ import codeRoutes from "./routes/codeRoutes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const path = require("path");
+app.use(express.static(path.join(__dirname, "../frontend")));
+
 // Load .env from parent directory (root of project)
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
