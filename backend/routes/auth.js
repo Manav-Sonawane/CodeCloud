@@ -7,17 +7,41 @@ const router = express.Router();
 
 router.post("/register", async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const {
+      fullname,
+      username,
+      email,
+      password,
+      age,
+      gender,
+      jobRole,
+      institution,
+      phone,
+    } = req.body;
 
     if (!username || !email || !password) {
-      return res.status(400).json({ error: "All fields are required" });
+      return res
+        .status(400)
+        .json({ error: "Username, email, and password are required" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Use fullname as username if fullname is provided (frontend sends fullname)
+    const finalUsername = fullname || username;
+
     await pool.query(
-      "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
-      [username, email, hashedPassword]
+      "INSERT INTO users (username, email, password, age, gender, job_role, institution, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+        finalUsername,
+        email,
+        hashedPassword,
+        age,
+        gender,
+        jobRole,
+        institution,
+        phone,
+      ]
     );
 
     res.json({ message: "User registered successfully" });

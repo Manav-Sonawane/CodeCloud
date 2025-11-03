@@ -324,9 +324,21 @@ async function handleSignIn(event) {
 async function handleSignUp(event) {
   event.preventDefault();
   const form = event.target;
-  const username = form.querySelector('input[type="text"]').value.trim();
-  const email = form.querySelector('input[type="email"]').value.trim();
-  const password = form.querySelector('input[type="password"]').value;
+
+  // Collect all form fields using their IDs
+  const fullname =
+    document.getElementById("signup-fullname")?.value.trim() || "";
+  const username =
+    document.getElementById("signup-username")?.value.trim() || "";
+  const age = document.getElementById("signup-age")?.value || null;
+  const gender = document.getElementById("signup-gender")?.value || "";
+  const jobRole = document.getElementById("signup-job")?.value.trim() || "";
+  const institution =
+    document.getElementById("signup-institution")?.value.trim() || "";
+  const phone = document.getElementById("signup-phone")?.value.trim() || "";
+  const email = document.getElementById("signup-email")?.value.trim() || "";
+  const password = document.getElementById("signup-password")?.value || "";
+
   const status =
     form.querySelector(".auth-status") || document.createElement("div");
   status.className = "auth-status";
@@ -334,11 +346,27 @@ async function handleSignUp(event) {
   status.style.marginTop = "0.5rem";
   form.appendChild(status);
 
+  // Basic validation
+  if (!fullname || !username || !email || !password) {
+    status.textContent = "Please fill in all required fields";
+    return;
+  }
+
   try {
     const res = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({
+        fullname,
+        username,
+        email,
+        password,
+        age: age ? parseInt(age) : null,
+        gender,
+        jobRole,
+        institution,
+        phone,
+      }),
     });
     const data = await res.json();
     if (res.ok) {

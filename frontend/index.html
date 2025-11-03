@@ -311,12 +311,69 @@
         <h2 class="signin-title">Create Your CloudCode Account</h2>
         <form onsubmit="handleSignUp(event)">
           <div class="input-group">
+            <label class="input-label">Full Name</label>
+            <input
+              type="text"
+              class="input-field"
+              id="signup-fullname"
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
+          <div class="input-group">
             <label class="input-label">Username</label>
             <input
               type="text"
               class="input-field"
+              id="signup-username"
               placeholder="Enter a username"
               required
+            />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Age</label>
+            <input
+              type="number"
+              class="input-field"
+              id="signup-age"
+              placeholder="Enter your age"
+              min="1"
+            />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Gender</label>
+            <select class="input-field" id="signup-gender">
+              <option value="">Prefer not to say</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label class="input-label">Job Role</label>
+            <input
+              type="text"
+              class="input-field"
+              id="signup-job"
+              placeholder="e.g., Student, Developer, etc."
+            />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Institution / Company</label>
+            <input
+              type="text"
+              class="input-field"
+              id="signup-institution"
+              placeholder="Enter your institution or company"
+            />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Phone Number</label>
+            <input
+              type="tel"
+              class="input-field"
+              id="signup-phone"
+              placeholder="Enter your phone number"
             />
           </div>
           <div class="input-group">
@@ -324,6 +381,7 @@
             <input
               type="email"
               class="input-field"
+              id="signup-email"
               placeholder="Enter your email"
               required
             />
@@ -333,6 +391,7 @@
             <input
               type="password"
               class="input-field"
+              id="signup-password"
               placeholder="Enter your password"
               required
             />
