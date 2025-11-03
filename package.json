@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "An online code compiler inspired by **OnlineGDB / Programiz**, built as a full-stack mini-project.  \r It supports **multiple programming languages**, user authentication, and code storage.",
   "main": "backend/server.js",
+  "type": "module",
   "dependencies": {
     "accepts": "^2.0.0",
     "anymatch": "^3.1.3",

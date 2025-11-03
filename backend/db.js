@@ -8,6 +8,7 @@ const pool = createPool({
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASS || "root",
   database: process.env.DB_NAME || "online_compiler",
+  port: process.env.DB_PORT || 3306,
 });
 
 export default pool;

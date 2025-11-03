@@ -11,9 +11,6 @@ import codeRoutes from "./routes/codeRoutes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const path = require("path");
-app.use(express.static(path.join(__dirname, "../frontend")));
-
 // Load .env from parent directory (root of project)
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
@@ -21,13 +18,23 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-app.use("/api/auth", authRoutes);
-
 app.use(express.static(path.join(__dirname, "../frontend")));
+app.use("/api/auth", authRoutes);
 
 app.use("/api/compiler", compilerRoutes);
 app.use("/api/code", codeRoutes);
+
+async function testDBConnection() {
+  try {
+    const connection = await pool.getConnection();
+    console.log("✅ Connected to the database!");
+    connection.release();
+  } catch (err) {
+    console.error("❌ Database connection failed:", err.message);
+  }
+}
+
+testDBConnection();
 
 app.get("/ping", async (req, res) => {
   try {
