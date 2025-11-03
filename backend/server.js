@@ -3,10 +3,10 @@ import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
 import cors from "cors";
-import authRoutes from "./backend/routes/auth.js";
-import pool from "./backend/db.js";
-import compilerRoutes from "./backend/routes/compiler.js";
-import codeRoutes from "./backend/routes/codeRoutes.js";
+import authRoutes from "./routes/auth.js";
+import pool from "./db.js";
+import compilerRoutes from "./routes/compiler.js";
+import codeRoutes from "./routes/codeRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,7 +35,7 @@ app.get("/ping", async (req, res) => {
   }
 });
 
-import { verifyToken } from "./backend/middleware/authMiddleware.js";
+import { verifyToken } from "./middleware/authMiddleware.js";
 
 app.get("/api/protected", verifyToken, (req, res) => {
   res.json({
